@@ -8,6 +8,20 @@ pragma solidity ^0.8.17;
  */
 
 /// @dev contract外でも定義可能。「フリーファンクション」とも呼ばれ、常に暗黙のInternal visibilityを持つ
+function sum(uint[] memory array) pure returns (uint s) {
+    for(uint i; i < array.length; i++) {
+        s += array[i];
+    }
+}
+
+
+function mul(uint[] memory array) pure returns (uint) {
+    uint m = 1;
+    for(uint i; i < array.length; i++) {
+        m *= array[i];
+    }
+    return m;
+}
 
 
 contract Function {
@@ -29,8 +43,18 @@ contract Function {
      * @dev ファンクション型のメンバーメソッド(.address)を返す
      * .address : 指定のファンクションが属するコントラクトのアドレスを取得
      */
+     function viewF() public view returns (address) {
+        return this.viewF.address;
+     }
+
+     function pureF(uint a, uint b) public pure returns (uint) {
+        return (a + b);
+     }
 
 
     /// @dev Function return variables（関数の戻り値変数）を利用した複数return
+    function sumMulF(uint[] memory arr) public pure returns (uint, uint) {
+        return (sum(arr),mul(arr));
+    }
 
 }
