@@ -13,11 +13,27 @@ pragma solidity ^0.8.17;
  */
 contract BlockProperties {
     // チェーンID
-
+    // 例)
+    // Ethereum Main Network    chainid:1, hex: 0x1
+    // Goeli Test Network       chainid:5, hex: 0x5
+    // Matic(Polygon) Mainnet   chainid:137, hex: 0x89
+    // Matic Testnet Mumbai     chainid:80001, hex: 0x12881
+    function getChainId() external view returns (uint) {
+        return block.chainid;
+    }
     // ブロックナンバー
+    function getBlockNumber() external view returns (uint) {
+        return block.number;
+    }
 
     // ブロックハッシュ
+    function getBlockHash(uint blockNum_) external view returns (bytes32) {
+        return blockhash(blockNum_);
+    }
 
     // ブロックタイムスタンプ UNIXエポック（1970/1/1 00:00:00）からの秒数
+    function getTimeStamp() external view returns (uint) {
+        return block.timestamp;
+    }
 
 }

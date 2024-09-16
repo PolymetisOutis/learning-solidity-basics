@@ -82,11 +82,24 @@ contract Address {
      */
 
     /// @dev 宛先アドレスにtransferでETHを移転(移転の場合send/callよりもtransferを使おう)
-
+    function transfer(address payable to) public payable {
+        to.transfer(msg.value);
+    }
 
     /// @dev 宛先アドレスにsendでETHを移転
+    function send(address payable to) public payable returns (bool) {
+        bool result = to.send(msg.value);
+        require(result, "Failed");
+        return result;
+    }
+
 
 
     /// @dev 宛先アドレスにcallでETHを移転
+    function call(address payable to) public payable returns (bool, bytes memory) {
+        (bool result, bytes memory data) = to.call{value: msg.value}("");
+        require(result, "Failed");
+        return (result, data);
+    }
 
 }

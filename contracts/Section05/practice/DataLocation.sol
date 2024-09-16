@@ -23,5 +23,32 @@ pragma solidity ^0.8.17;
 contract DataLocation {
 
     // 状態変数はstorage
+    struct Character {
+        string name;
+        uint level;
+    }
+    Character[] public characters;
+
+    string public a;
+    string public b;
+    string public c = "ccc";
+
+    function setA() public view returns (string memory, string memory) {
+        //  * storage, <=> memory,calldata : 値そのもののコピーを渡す
+        string memory aa = a;
+        // aとaaはそれぞれ独立しているので、aは変更されない
+        aa = "hoge";
+        // 元の状態変数定義の初期設定の値を返す
+        return (a, aa);
+    }
+
+    function setC() public returns (string memory) {
+        //  * storage => local storage : 値への参照のコピーを渡す
+        // ＊ ※local storage : 関数内で定義された変数のこと
+        string storage d = c;
+
+        c = "222";
+        return d;
+    }
 
 }
