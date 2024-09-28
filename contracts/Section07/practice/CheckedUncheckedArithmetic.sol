@@ -10,20 +10,29 @@ pragma solidity ^0.8.17;
  */
 contract CheckedUncheckedArithmetic {
     // a:1, b:255
-
+    function checkedOverFlow(uint8 a, uint8 b) external pure returns (uint8) {
         // 加算結果が255を超えるとuint8型の範囲を超えるためオーバーフローとなりrevertされる
+        return a + b;
+    }
 
     // a:1, b:2
-
+    function checkedUnderFlow(uint8 a, uint8 b) external pure returns (uint8) {
         // 減算結果が0未満となるとuint8型の範囲を超えるためアンダーフローとなりrevertされる
+        return a - b;
+    }
+
 
     // a:1, b:255
-
+    function uncheckedOverFlow(uint8 a, uint8 b) external pure returns (uint8) {
         // チェックを無効化する オーバーフロー
+        unchecked { return a + b; }
+    }
 
     // a:1, b:2
-
+    function uncheckedUnderFlow(uint8 a, uint8 b) external pure returns (uint8) {
         // チェックを無効化する アンダーフロー
+        unchecked { return a - b; }
+    }
 
 
 }

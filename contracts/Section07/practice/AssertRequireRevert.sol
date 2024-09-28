@@ -57,7 +57,25 @@ contract AssertRequireRevert {
      * 0x41 : メモリを過剰に割り当てたり、大きすぎる配列を作成した場合
      * 0x51 : 内部関数型のゼロ初期化変数を呼び出した場合
      */
+    uint public price = 1000;
+    /**
+    * @dev
+    *  errorステートメントでエラー定義が可能。継承できるが、オーバーライドやオーバーロードは不可。
+    *  このコメントにエラー理由を記述できる。
+    *  このコメントはBlockchainに記録されないので、安価なエラー報告機能として活用できるメリットがある
+    *  @param a_ number to be devided
+    *  @param b_ divisor
+    */
+    error DivError(uint a_, uint b_);
 
+    function assertF() external {
+        for (uint i = 0; i < 100; i++) {
+            price = i;
+        }        
+        // price ~~ 1000がtrueならOK, price != 0ならパニック型エラー
+        assert( price == 1000 );
+
+    }
 
 
     /**
@@ -66,19 +84,33 @@ contract AssertRequireRevert {
  　　   * 外部コントラクトの呼び出しによる入力や戻り値に対する条件チェックにも使うことがある
      * 例外処理実行までに消費したガスは戻ってこないが、未消費のガスは戻る。
     　　*/
+    function requireF(uint n) external pure returns (uint) {
+        require( n <= 10 , "out of range above 10");
+        uint power = n ** 2;
+        return power;
+    }
 
     /** 
      * @dev revert()はError(string)型のエラーを発生させる
      * revertステートメントとrevertファンクションを使用して、直接revertをトリガーできる
      * 例外処理実行までに消費したガスは戻ってこないが、未消費のガスは戻る。
      */ 
-     
+     function revertF(uint a, uint b) external pure returns (uint, uint, uint) {
+        if (b == 0) {
             // revertファンクション
             // a:1, b:0
-
+            revert("enter a number greater than 0");
+        } else if (a == 0) {
             // revertステートメント。errorステートメントとセット
             // a:0, b:1
-
+            revert DivError(a, b);
+        } else {
             // a:10, b:2
+            return (a, b, a/b);
+        } 
+     } 
+     
+
+
 
 }

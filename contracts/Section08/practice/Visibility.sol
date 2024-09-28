@@ -48,18 +48,22 @@ contract contractA {
 // contractAを継承
 contract Visibility is contractA {
     // publicファンクションは継承先でもコントラクト内外両方からcallできる
-
+    function callPublicFunction() public pure returns (uint) {
         // コントラクト外からのファンクションcall
+        // return this.publicFunction();
 
         // コントラクト内からのファンクションcall
+        return publicFunction();
+    }
 
 
     // externalファンクションは継承先でもコントラクト外からのみしかcallできない
-
+    function callExternalFunction() public view returns (uint) {
         // コントラクト外からのファンクションcall
-
+        return this.externalFunction();
         // コントラクト内からのファンクションcall
-
+    
+    }
 
     // internalファンクションは継承先でもcallできる
 

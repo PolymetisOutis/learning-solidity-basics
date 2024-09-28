@@ -10,11 +10,18 @@ pragma solidity ^0.8.17;
 
 // 接続先コントラクト
 contract ContractA {
-
+    function div(uint a, uint b) external pure returns (uint) {
+        require(a != 0, "a must be greater than 0");
+        return a/b;
+    }
 }
 
 contract TryCatch {
+    ContractA public conA;
 
+    constructor() {
+        conA = new ContractA();
+    }
  
     /**
      * @dev 
@@ -29,14 +36,33 @@ contract TryCatch {
      * catch { ... }
      *. エラーデータに関心なければこれを使う
      */
+    function tryCatchDiv(uint a_, uint b_)
+        external 
+        view 
+        returns (
+            uint,
+            bool,
+            string memory,
+            uint,
+            bytes memory
+        ) {
+            try conA.div(a_, b_) returns (uint ans) {
+                // conA.div(a_, b_)の実行結果のreturnを (uint ans)として受け取ることができる
+                // {a:4,b:2}
+                return (ans, true, "", 0, "");
+            } catch Error(string memory reason) {
+                // {a:0,b:2}
+                return (1000, false, reason, 0, "");
+            } catch Panic(uint errCode) {
+                // {a:2,b:0}
+                return (2000, false, "", errCode, "");
+            } catch (bytes memory data) {
+                return (3000, false, "", 0, data);
+            }
+        }
 
 
-            // conA.div(a_, b_)の実行結果のreturnを (uint ans)として受け取ることができる
-            // {a:4,b:2}
 
-            // {a:0,b:2}
-
-            // {a:2,b:0}
 
         
         /** @dev パニック例外コード
